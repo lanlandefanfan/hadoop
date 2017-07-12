@@ -1,0 +1,186 @@
+body{
+	font:normal  "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: #fff;
+	text-align: center;
+	position: relative;
+	height: auto !important;
+	min-height: 100%;
+	margin:0;
+	padding: 0;
+}
+
+.wrapper{
+	width: 100%;
+	min-height: 100%;
+}
+
+.header{
+	height: 60px;
+	color: #000;
+	background-color: #fff;
+	position: relative;
+	border-style: none none solid;
+	border-width: 2px;
+	border-color: #ccccff;
+}
+
+.content{
+	width: 359px;
+	height: 450px;
+	position: relative;
+	margin:95px auto;
+	background-color: #fff;
+}
+
+.logo{
+	float: left;
+	padding-left: 20px;
+	padding-top: 10px;
+}
+
+img{
+	max-width: 100%;
+	height: auto;
+}
+
+a,p,ul{
+	margin:0;
+	padding: 0;
+}
+
+ul{
+	list-style: none;
+}
+
+a{
+	text-decoration: none;
+	color: #000;
+}
+
+p{
+	font-size: 2em;
+	color: #999;
+}
+
+.nav{
+	width: 230px;
+	height: 60px;
+	position: relative;
+	float: right;
+	padding-top: 20px;
+	font-size: 1em;
+}
+
+.nav li{
+	float: left;
+	height: 100%;
+	text-align: center;
+	padding-right: 40px;
+}
+
+.op{
+	width: 100%;
+	height: auto;
+	position: relative;
+	padding-top: 46px;
+}
+
+.input{
+	display: block;
+	font-size: 1.25em;
+	width: 344px;
+	height: 50px;
+	margin-bottom: 19px;
+	padding-left: 13px;
+	border:1px solid #ccccff;
+	border-radius: 3px;
+}
+
+.yz{
+	display: block;
+	width: 359px;
+	height: 50px;
+	margin-bottom: 21px;
+	border-radius: 3px;
+	background-color: #f1f1f1;
+	opacity: 0.6;
+}
+
+input::-webkit-input-placeholder{
+	color:#ccc;
+}
+
+.button{
+	display: inline-block;
+	background-color:#3a6fbe;
+	opacity: 0.6;
+	width:359px;
+	height:50px;
+	font-size:1.43em;
+	color:#fff;
+	text-align:center;
+	border-radius: 3px;
+	margin-top: 12px;
+}
+
+.footer{
+	width: 359px;
+	height: 18px;
+	position: relative;
+	margin-top: 25px;
+	border-style: solid none none;
+	border-width: 1px;
+	border-color: #ccccff;
+}
+
+.wj{
+	font-size: 0.81em;
+	position: relative;
+	float: right;
+	text-decoration: none;
+	margin-top: 20px;
+	color: #3333ff;
+}
+
+@media screen and (min-device-width:1280px) and (max-width:1440px) and (max-device-width:1440px){
+	.header{
+		height: 55px;
+	}
+
+	.content{
+		width: 255px;
+		height: 319px;
+		margin:65px auto;
+	}
+
+	.input{
+		width: 245px;
+		height: 36px;
+		font-size: 0.89em;
+	}
+
+	.yz{
+		width: 255px;
+		height: 36px;
+	}
+
+	.button{
+		width: 255px;
+		height: 36px;
+		font-size: 1em;
+	}
+	
+	.footer{
+		width: 255px;
+		height: 13px;
+		font-size: 0.62em;
+	}
+
+	p{
+		font-size: 1.5em;
+	}
+}
+
+@media screen and (min-device-width: 1600px) and (max-width:1920px) and (max-device-width:1920px){
+
+}
