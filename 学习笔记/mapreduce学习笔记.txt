@@ -1,0 +1,201 @@
+一、
+Configuration conf = new Configuration(); // 读取hadoop配置
+
+Job job = new Job(conf, "作业名称"); // 实例化一道作业
+
+job.setMapperClass(Mapper类型);
+
+job.setCombinerClass(Combiner类型);
+
+job.setReducerClass(Reducer类型);
+
+job.setOutputKeyClass(输出Key的类型);
+
+job.setOutputValueClass(输出Value的类型);
+
+FileInputFormat.addInputPath(job, new Path(输入hdfs路径));
+
+FileOutputFormat.setOutputPath(job, new Path(输出hdfs路径));
+
+// 其它初始化配置
+
+JobClient.runJob(job)
+
+二、
+hadoop代码执行流程
+http://www.cnblogs.com/forfuture1978/archive/2010/11/19/1882279.html
+
+三、
+在mapreduce中调用数据库
+http://blog.csdn.net/luyee2010/article/details/8611784
+
+四、
+mapreduce的模板，包含代码详解
+
+五、
+hashset和set
+1、Set集合里多个对象之间没有明显的顺序。Set集合不允许重复元素，
+是因为Set判断两个对象相同不是使用==运算符，而是根据equals方法。
+2、hash算法（散列函数）的功能：
+它能保证通过一个对象快速查找到另一个对象。hash算法的价值在于速度，它可以保证查询得到快速执行。
+
+六、
+1.StringTokenizer是字符串分隔解析类型
+int countTokens（）：返回nextToken方法被调用的次数。
+boolean hasMoreTokens（）：返回是否还有分隔符。
+boolean hasMoreElements（）：返回是否还有分隔符。
+String nextToken（）：返回从当前位置到下一个分隔符的字符串。
+Object nextElement（）：返回从当前位置到下一个分隔符的字符串。
+String nextToken（String delim）：与4类似，以指定的分隔符返回结果。
+
+七、多个map和reduce协同作业
+http://blog.csdn.net/qq1010885678/article/details/50719138
+
+八、mapreduce的7个实例（包含源码）
+http://www.sohu.com/a/147016674_487514
+
+实例1：
+（1）输入输出的key与value可以通过外部类重写
+mapper<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
+
+（2）在map类的参数中已经设定了context的格式，
+这个格式就是map方法的输入key的格式，输入value的格式，输出key的格式，输出value的格式
+
+（3）map参数的value就是输入的文件
+
+（4）在map参数的最后，对context进行写入，是后面的输入的key和value的格式，
+在这里要对map方法的参数的context进行区分
+
+（5）最后在绑定job的时候需要单独指定map输出的和reduce输出（此时已经是最终输出）的key和value的类型
+
+（6）写完例子1之后遇到的问题：输出的文件为空
+考虑：可能是在map方法中分隔的是出现问题，写一个测试类来进行测试，
+把输入文件放到本地，在控制台模拟map来进行输出
+问题原因：把输入文件的格式写错了，在自定义的map_one类中 extends的map类写的value值与后面的对应不起来
+
+九、
+map处理逻辑——对传进来的一行数据如何处理？输出什么信息？
+map是每处理一行数据，就进行往下的传递，所以我们编写逻辑的时候就要对每一行的逻辑处理
+
+十、
+compareto方法，返回参与比较的前后两个字符串的asc码的差值
+
+十一、
+当元素很多时，后添加到集合中的元素比较的次数就非常多了。     
+于是，Java采用了哈希表的原理。 
+哈希算法也称为散列算法，是将数据依特定算法直接指定到一个地址上。 
+初学者可以这样理解，hashCode方法实际上返回的就是对象存储的物理地址（实际可能并不是）。   
+这样一来，当集合要添加新的元素时，先调用这个元素的hashCode方法，就一下子能定位到它应该放置的物理位置上。 
+如果这个位置上没有元素，它就可以直接存储在这个位置上，不用再进行任何比较了；如果这个位置上已经有元素了， 
+就调用它的equals方法与新元素进行比较，相同的话就不存了，不相同就散列其它的地址。 
+
+12.
+int & Integer.MAX_VALUE代表的
+最快的方式使数字变为正值，用于仅仅想要一个正值而不需要值的大小的情况，因为通过这种方式产生的数字是随机的
+
+13.
+writeUTF和readUTF是用于来读取和写 ，以UTF-8编码的string字段
+
+14.
+（1）在mapreduce的实际工作流程是：map-partition-group-reduce
+partition是用来区分文件分组
+group是将相同的key合并成<key,iterable（value1，value2，...）>
+（2）而partition区分的方式就是：根据输入的key和value来返回一个分区号，
+而且设置的分区号要跟用户设置的reduce task保持一致
+
+15.hadoop的writabelcomparabel接口
+WritableComparable接口是可序列化并且可比较的接口
+MapReduce中所有的key值类型都必须实现这个接口，
+既然是可序列化的那就必须得实现readFiels（）和write（）这两个序列化和反序列化函数，
+既然也是可比较的那就必须得实现compareTo（）函数，
+该函数即是比较和排序规则的实现。这样MR中的key值就既能可序列化又是可比较的。
+
+15.
+获取intwritable，doublewritable，nullwritable都需要使用get（）方法
+
+16.
+super关键字的两种用法：
+1.用于调用超类的构造函数（有参数的情况下可以在super中加入参数，不过要保证跟超类一致）；
+2.用于访问超类中被子类的某个成员隐藏的成员；
+
+17.
+在mapreduce中我们
+1）通过inputformat来读取文件
+2）创建recordreader来获取读到的文件，
+同时调用nextkeyvalue生成<key，value>对，然后通过get方法传递给map
+3）SequenceFileOutPutFormat 用来输出对象
+
+18.recordreader
+getprocessed（）是用来获取，有多少输入已经被mapreduce处理
+getpath方法获取的是path类型的路径，path数据结构中存储的可能不止一条路径
+
+19.
+当按照源码来进行编程，提示方法不对，根据其改正还是提示错误，而且提示改成原来的方法，
+反复在两个方法中跳转，一直报错，可能的原因是import的包错误
+
+20.
+map方法只是在意输入文件和输出的键值对，中间的过程是不会在意的，
+所以我们只需要context所write的内容是不是我们所想要传递给reduce的键值对
+
+21.
+ChainMapper类允许在单一的Map任务中使用多个Mapper来执行任务，
+这些Mapper将会以链式或者管道的形式来调用。 
+第一个Mapper的输出即为第二个Mapper的输入，以此类推，直到最后一个Mapper则为任务的输出。
+
+22.
+在本地读取mapreduce的文件系统 
+
+		String uri="";//指定hadoop的路径  
+        Configuration configuration=new Configuration();  
+        FileSystem fileSystem=FileSystem.get(URI.create(uri), configuration);  
+        FSDataInputStream in=null;  
+        in=fileSystem.open(new Path(uri));  
+//      FileStatus fileStatus=fileSystem.getFileStatus(new Path(uri));  
+//      byte[] buffer=new byte[1024];  
+//      in.read(4096, buffer, 0, 1024);  
+        IOUtils.copyBytes(in, System.out, 4096, false);  
+        IOUtils.closeStream(in);
+		
+		在本地读取hadoop的文件可以使用
+		FSDataInputStream in来获取
+		直接通过in.readline
+		
+23.
+keeponly类的作用
+得到不重复的appkey和userid
+appuser的类的作用
+得到app下面的用户数量
+
+24.
+当数据库primary设置成自增的时候，在insert的语句不需要写这一项，
+即（？？？？？...）可以少一个
+因为会自动生成
+
+26.在进行string比较的时候，使用equal进行比较，而不要使用==
+在往list<db_entity>添加数据的时候，在外面声明db_entity会是list.add添加的数据只是db_entity的最后一条
+
+27.
+在使用mapreduce的时候，有时输出文件为空，可能的原因是输出的value是intwritabel类型，改为text类型则正常
+
+28.
+多个mapreduce的方式
+方式1：map和reduce分开在不同的包里面，在main方法里面调用，使用八股文式的罗列配置输出信息
+方式2：多个map和reduce在一个类里面，在main方法里面用JobConf 和ControlledJob 类来实现
+
+29.
+日志缺失log4j
+ubuntu14.04+eclipse(mars)+hadoop-2.7.1开发环境调试程序出现log4j:
+WARN no appenders could be found for logger。。
+http://blog.csdn.net/shennongzhaizhu/article/details/50493338
+
+30.
+一个map可以输入多个文件，只要在main方法里面写多次setinputfile就可以了
+获取map当前处理的输入文件的方法
+String path = ((FileSplit)context.getInputSplit()).getPath().toString();
+https://stackoverflow.com/questions/19012482/how-to-get-the-input-file-name-in-the-mapper-in-a-hadoop-program
+
+31.
+Java中的^符号，代表异或，相同为0，相同为1
+
+
+

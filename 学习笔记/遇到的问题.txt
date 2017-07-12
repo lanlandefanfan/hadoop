@@ -1,0 +1,42 @@
+./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.4.jar
+
+/usr/local/hadoop/bin/hadoop jar /home/hduser/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.4.jar wordcount /input /output
+
+/usr/local/hadoop/bin/hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.4.jar wordcount /input /output
+
+1.当遇到hadoop fs -ls
+不出现的时候或者有警告的时候
+要在~/.bashrc文件加上某个native
+
+2.hadoop namenode -format
+失败的原因可能是没有权限，所有需要用hdfs的命令形式，并且前面加上sudo
+
+3.无法启动hadoop 
+即start-dfs.sh提示无法创建文件
+权限的问题使用chmod来增加权限
+
+4.找不到主类——代码没有编译过，需要build path
+
+5.eclipse没有菜单栏
+
+6.ssh的作用
+SSH是一种网络协议，用于计算机之间的加密登录
+如果一个用户从本地计算机，使用SSH协议登录另一台远程计算机，我们就可以认为，这种登录是安全的，即使被中途截获，密码也不会泄露。
+
+7.日活跃用户
+月活跃用户
+留存用户：
+APPkey（用来获取使用的手机应用）
+手机区别码
+
+8.虚拟机无法上网
+需要手动打开VMware DHCP Service和VMware NAT Service
+然而并没有用
+
+9.在Linux中，从本地向hadoop传递数据的时候，
+时copy的数据会有权限问题（会提示permission denied），而move的数据就没有权限问题
+
+
+
+
+
