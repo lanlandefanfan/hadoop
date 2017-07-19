@@ -7,8 +7,13 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-import com.sdu.edu.bean.TimeValueBean;
+import com.edu.sdu.bean.TimeValueBean;
 
+/**
+ * 新设备首次使用时长的mapper
+ * @author 杜仲楠
+ *
+ */
 public class NewDeviceMapper extends Mapper<LongWritable, Text, Text, TimeValueBean> {
 
 	@Override

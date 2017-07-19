@@ -5,20 +5,26 @@ import java.io.IOException;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Mapper.Context;
+
+import com.edu.sdu.bean.TimeValueBean;
 
 /**
- * 去重操作的mapper
+ * 下载量统计的mapper
  * @author 王宁
  *
  */
-public class DedupMapper extends Mapper<LongWritable, Text, Text, Text> {
-	
+public class DownloadCountMapper extends Mapper<LongWritable, Text, Text, TimeValueBean> {
+
 	public void map(LongWritable ikey, Text ivalue, Context context) throws IOException, InterruptedException {
 		String line = ivalue.toString();
 		String[] val = line.split("\\s+");
-		System.out.println(val[0]);
-		if(val[0] != null && val[0].length() > 0)
-			context.write(new Text(val[0]), new Text(""));
+		
+		String app_key = val[0];
+		String state = val[5];
+		String time = val[6];
+		
+		if(state.equals("6"))
+			context.write(new Text(app_key), new TimeValueBean(state, time));
 	}
-
 }

@@ -7,9 +7,9 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
-import com.sdu.edu.bean.RemainOprBean;
-import com.sdu.edu.bean.Sysmbol;
-import com.sdu.edu.bean.PlayerDeviceDetailBean;
+import com.edu.sdu.bean.PlayerDeviceDetailBean;
+import com.edu.sdu.bean.RemainOprBean;
+import com.edu.sdu.bean.Sysmbol;
 import com.sun.jersey.core.util.StringIgnoreCaseKeyComparator;
 
 /**

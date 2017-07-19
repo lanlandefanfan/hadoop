@@ -15,7 +15,7 @@ import org.apache.hadoop.mapreduce.lib.jobcontrol.ControlledJob;
 import org.apache.hadoop.mapreduce.lib.jobcontrol.JobControl;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import com.sdu.edu.bean.Sysmbol;
+import com.edu.sdu.bean.Sysmbol;
 
 /**
  * function 计算在最近一个月内使用APP在以下时间段 1 2-3 4-7 8-14 15-30 的用户数量

@@ -6,8 +6,13 @@ import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import com.sdu.edu.bean.TimeValueBean;
+import com.edu.sdu.bean.TimeValueBean;
 
+/**
+ * 支付钱数统计的reducer
+ * @author 王宁
+ *
+ */
 public class PayMoneyReducer extends Reducer<Text, TimeValueBean, Text, TimeValueBean> {
 
 	public void reduce(Text _key, Iterable<TimeValueBean> values, Context context) throws IOException, InterruptedException {

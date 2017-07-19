@@ -8,6 +8,11 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
+/**
+ * 活跃设备使用天数的mapper
+ * @author 王宁
+ *
+ */
 public class ActiveDevicePlayDayMapper extends Mapper<LongWritable, Text, Text, Text> {
 
 	Map<String, String> dedupMap = new HashMap<>();

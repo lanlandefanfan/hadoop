@@ -9,8 +9,13 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
-import com.sdu.edu.bean.PlayerDeviceDetailBean;
+import com.edu.sdu.bean.PlayerDeviceDetailBean;
 
+/**
+ * 支付用户运营商统计的mapper
+ * @author 王宁
+ *
+ */
 public class PayUserCOMapper extends Mapper<LongWritable, Text, PlayerDeviceDetailBean, Text> {
 
 	Map<String, String> map = new HashMap<>();

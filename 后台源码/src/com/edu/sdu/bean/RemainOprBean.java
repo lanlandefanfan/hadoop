@@ -1,4 +1,4 @@
-package com.sdu.edu.bean;
+package com.edu.sdu.bean;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -6,6 +6,11 @@ import java.io.IOException;
 
 import org.apache.hadoop.io.Writable;
 
+/**
+ * 设备与状态实体
+ * @author 王宁
+ *
+ */
 public class RemainOprBean implements Writable{
 
 	public String device;

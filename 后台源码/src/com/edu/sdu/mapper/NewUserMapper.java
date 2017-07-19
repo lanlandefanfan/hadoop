@@ -2,21 +2,14 @@ package com.edu.sdu.mapper;
 
 import java.io.IOException;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.util.GenericOptionsParser;
 
-import com.edu.sdu.reducer.DedupReducer;
-import com.sdu.edu.bean.TimeValueBean;
+import com.edu.sdu.bean.TimeValueBean;
 
 /**
- * 获取新用户使用时长的mapper
+ * 获取新用户首次使用时长的mapper
  * 
  * @author 王宁
  *

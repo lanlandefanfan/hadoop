@@ -8,14 +8,19 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import com.edu.sdu.bean.PlayerDeviceDetailBean;
+import com.edu.sdu.bean.Sysmbol;
 import com.edu.sdu.mapper.activeUserDetail.ActiveUserCIMapper;
 import com.edu.sdu.mapper.payUserDetail.PayUserCOMapper;
 import com.edu.sdu.reducer.DetailReducer;
 import com.edu.sdu.util.Net;
 import com.edu.sdu.util.WriteJson;
-import com.sdu.edu.bean.PlayerDeviceDetailBean;
-import com.sdu.edu.bean.Sysmbol;
 
+/**
+ * 付费用户 运营商统计
+ * @author 王宁
+ *
+ */
 public class PayUserCO {
 
 	public static void main(String[] args) {

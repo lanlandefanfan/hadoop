@@ -8,17 +8,17 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import com.edu.sdu.bean.PlayerDeviceDetailBean;
+import com.edu.sdu.bean.Sysmbol;
 import com.edu.sdu.mapper.newDeviceDetail.NewDevicePTMapper;
 import com.edu.sdu.mapper.newUserDetail.NewUserPTMapper;
 import com.edu.sdu.reducer.DetailReducer;
 import com.edu.sdu.runner.newDeviceDetail.NewDevicePT;
 import com.edu.sdu.util.Net;
 import com.edu.sdu.util.WriteJson;
-import com.sdu.edu.bean.PlayerDeviceDetailBean;
-import com.sdu.edu.bean.Sysmbol;
 
 /**
- * 新用户 设备型号
+ * 新用户 设备型号统计
  * @author 王宁
  *
  */

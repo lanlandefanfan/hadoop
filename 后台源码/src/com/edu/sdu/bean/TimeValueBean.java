@@ -1,4 +1,4 @@
-package com.sdu.edu.bean;
+package com.edu.sdu.bean;
 
 import java.io.DataInput;
 import java.io.DataOutput;

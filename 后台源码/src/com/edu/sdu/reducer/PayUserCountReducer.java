@@ -6,7 +6,7 @@ import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import com.sdu.edu.bean.TimeValueBean;
+import com.edu.sdu.bean.TimeValueBean;
 
 /**
  * 支付用户人数的reducer

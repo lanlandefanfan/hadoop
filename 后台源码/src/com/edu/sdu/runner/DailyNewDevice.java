@@ -1,9 +1,7 @@
 package com.edu.sdu.runner;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.hadoop.conf.Configuration;
@@ -11,29 +9,23 @@ import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.jobcontrol.ControlledJob;
-import org.apache.hadoop.mapreduce.lib.jobcontrol.JobControl;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.metrics2.sink.ganglia.AbstractGangliaSink;
 
+import com.edu.sdu.bean.Sysmbol;
+import com.edu.sdu.bean.TimeValueBean;
 import com.edu.sdu.mapper.DailyNewDeviceMapper;
-import com.edu.sdu.mapper.DailyNewUserMapper;
-import com.edu.sdu.mapper.DedupMapper;
-import com.edu.sdu.mapper.DeviceDupMapper;
-import com.edu.sdu.mapper.NewUserMapper;
 import com.edu.sdu.reducer.DailyNewDeviceReducer;
-import com.edu.sdu.reducer.DailyNewUserReducer;
-import com.edu.sdu.reducer.DedupReducer;
-import com.edu.sdu.reducer.DeviceDupReducer;
-import com.edu.sdu.reducer.NewUserReducer;
 import com.edu.sdu.util.Database;
-import com.sdu.edu.bean.Sysmbol;
-import com.sdu.edu.bean.TimeValueBean;
-import com.sun.java_cup.internal.runtime.Symbol;
+import com.edu.sdu.util.Net;
+import com.edu.sdu.util.Tool;
 
+/**
+ * 日新增设备统计
+ * @author 王宁
+ *
+ */
 public class DailyNewDevice {
 
 	public static Date startDate;
@@ -69,13 +61,53 @@ public class DailyNewDevice {
 			
 			String str = null;
 			boolean flag = false;
+			String postStr = "";
 			while ((str = bufferedReader.readLine()) != null) {
 				String[] val = str.split("\\s+");
-				flag = database.updateAppCriticalData(val[0], 
+				String app_key = val[0]; // 当前appkey
+				String newDevice = val[1]; // 当天新增设备
+				String date = val[2]; // 当天日期
+				
+				String limitData[] = database.getAlertData(app_key, "2");
+				if (limitData[0] != null) {
+					String id = limitData[0];	// 预警id
+					int days = Integer.parseInt(limitData[1]); // 计算前days天的数据
+					String limit = limitData[2]; // 限制波动率
+					int trigger = Integer.parseInt(limitData[3]); // 0:<  1:>
+					
+					int total = 0;	// 前n天新增设备总数
+					int computeDays = 0; // n
+					for (int i = 1; i <= days; i++) {
+						String predate = Tool.getPreNdayDate(date, i);
+						String criticalData[] = database.getAppCriticalData(app_key, predate);
+						if(criticalData[0] != null){
+							total += Integer.parseInt(criticalData[1]);
+							computeDays++;
+						}
+					}
+					if(computeDays > 0){
+						int preAverageData = total / computeDays;	// 之前的数据平均
+						if(Tool.getIsAlertOrNot(preAverageData, Integer.parseInt(newDevice), Integer.parseInt(limit), trigger)){
+							flag = true;
+							System.out.println(preAverageData);
+							System.out.println(newDevice);
+							if(!postStr.equals(""))
+								postStr += ",";
+							postStr += id;
+						}
+					}
+				}
+				
+				database.updateAppCriticalData(val[0], 
 						"", val[1], "", "", "", "", val[2]);
-				flag = database.updateRemainDevice(val[0], val[2], val[1], "", "", "", "", "", "", "");
+				database.updateRemainDevice(val[0], val[2], val[1], "", "", "", "", "", "", "", "", "");
 			}
 			System.out.println(flag);
+			if(flag){
+				if(!postStr.equals(""))
+					System.out.println(postStr);
+					Net.sendMail(postStr);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

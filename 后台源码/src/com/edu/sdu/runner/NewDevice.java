@@ -14,12 +14,17 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import com.edu.sdu.bean.Sysmbol;
+import com.edu.sdu.bean.TimeValueBean;
 import com.edu.sdu.mapper.NewDeviceMapper;
 import com.edu.sdu.reducer.NewDeviceReducer;
 import com.edu.sdu.util.Database;
-import com.sdu.edu.bean.Sysmbol;
-import com.sdu.edu.bean.TimeValueBean;
 
+/**
+ * 新设备首次使用时长
+ * @author 杜仲楠
+ *
+ */
 public class NewDevice {
 	public static void main(String[] args) throws Exception {
 		Sysmbol.startDay = args[0];

@@ -7,6 +7,11 @@ import java.util.Map;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
+/**
+ * 活跃用户使用天数统计的reducer
+ * @author 王宁
+ *
+ */
 public class ActiveUserPlayDayReducer extends Reducer<Text, Text, Text, Text> {
 
 	public void reduce(Text _key, Iterable<Text> values, Context context) throws IOException, InterruptedException {

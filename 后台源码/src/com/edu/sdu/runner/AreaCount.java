@@ -14,6 +14,10 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import com.edu.sdu.bean.AreaOrderBean;
+import com.edu.sdu.bean.RemainOprBean;
+import com.edu.sdu.bean.Sysmbol;
+import com.edu.sdu.bean.TimeValueBean;
 import com.edu.sdu.mapper.AreaCountMapper;
 import com.edu.sdu.mapper.DailyNewDeviceMapper;
 import com.edu.sdu.mapper.RemainDeviceMapper;
@@ -21,11 +25,12 @@ import com.edu.sdu.reducer.AreaCountReducer;
 import com.edu.sdu.reducer.DailyNewDeviceReducer;
 import com.edu.sdu.reducer.RemainDeviceReducer;
 import com.edu.sdu.util.Database;
-import com.sdu.edu.bean.AreaOrderBean;
-import com.sdu.edu.bean.RemainOprBean;
-import com.sdu.edu.bean.Sysmbol;
-import com.sdu.edu.bean.TimeValueBean;
 
+/**
+ * 地区分布
+ * @author 李安修
+ *
+ */
 public class AreaCount {
 	
 	public static void main(String[] args) throws Exception {

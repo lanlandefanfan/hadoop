@@ -8,13 +8,18 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import com.edu.sdu.bean.PlayerDeviceDetailBean;
+import com.edu.sdu.bean.Sysmbol;
 import com.edu.sdu.mapper.payDeviceDetail.PayDeviceCOMapper;
 import com.edu.sdu.reducer.DetailReducer;
 import com.edu.sdu.util.Net;
 import com.edu.sdu.util.WriteJson;
-import com.sdu.edu.bean.PlayerDeviceDetailBean;
-import com.sdu.edu.bean.Sysmbol;
 
+/**
+ * 支付设备 运营商统计
+ * @author 王宁
+ *
+ */
 public class PayDeviceCO {
 
 	public static void main(String[] args) {

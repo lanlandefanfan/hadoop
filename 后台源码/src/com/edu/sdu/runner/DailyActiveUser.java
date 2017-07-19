@@ -20,11 +20,13 @@ import org.apache.hadoop.mapreduce.lib.jobcontrol.ControlledJob;
 import org.apache.hadoop.mapreduce.lib.jobcontrol.JobControl;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import com.edu.sdu.bean.Sysmbol;
 import com.edu.sdu.util.Database;
-import com.sdu.edu.bean.Sysmbol;
+import com.edu.sdu.util.Net;
+import com.edu.sdu.util.Tool;
 
 /**
- * function 日活跃用户
+ * 日活跃用户
  * 
  * @author 谢世杰
  */
@@ -196,11 +198,51 @@ public class DailyActiveUser {
 		
 		String str = null;
 		boolean flag = false;
+		String postStr = "";
 		while ((str = bufferedReader.readLine()) != null) {
 			String[] val = str.split("\\s+");
-			flag = database.updateAppCriticalData(val[0],
+			String app_key = val[0]; // 当前appkey
+			String activeUser = val[2]; // 当天活跃用户数
+			String date = val[1]; // 当天日期
+			
+			String limitData[] = database.getAlertData(app_key, "3");
+			if (limitData[0] != null) {
+				String id = limitData[0];	// 预警id
+				int days = Integer.parseInt(limitData[1]); // 计算前days天的数据
+				String limit = limitData[2]; // 限制波动率
+				int trigger = Integer.parseInt(limitData[3]); // 0:<  1:>
+				
+				int total = 0;	// 前n天活跃用户总数
+				int computeDays = 0; // n
+				for (int i = 1; i <= days; i++) {
+					String predate = Tool.getPreNdayDate(date, i);
+					String criticalData[] = database.getAppCriticalData(app_key, predate);
+					if(criticalData[0] != null){
+						total += Integer.parseInt(criticalData[2]);
+						computeDays++;
+					}
+				}
+				if(computeDays > 0){
+					int preAverageData = total / computeDays;	// 之前的数据平均
+					if(Tool.getIsAlertOrNot(preAverageData, Integer.parseInt(activeUser), Integer.parseInt(limit), trigger)){
+						flag = true;
+						System.out.println(preAverageData);
+						System.out.println(activeUser);
+						if(!postStr.equals(""))
+							postStr += ",";
+						postStr += id;
+					}
+				}
+			}
+			
+			database.updateAppCriticalData(val[0],
 					"", "", val[2], "", "", "", val[1]);
 		}
 		System.out.println(flag);
+		if(flag){
+			if(!postStr.equals(""))
+				System.out.println(postStr);
+				Net.sendMail(postStr);
+		}
 	}
 }

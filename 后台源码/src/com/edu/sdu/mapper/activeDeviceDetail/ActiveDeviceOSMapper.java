@@ -8,8 +8,13 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-import com.sdu.edu.bean.PlayerDeviceDetailBean;
+import com.edu.sdu.bean.PlayerDeviceDetailBean;
 
+/**
+ * 活跃设备操作系统统计的mapper
+ * @author 王宁
+ *
+ */
 public class ActiveDeviceOSMapper extends Mapper<LongWritable, Text, PlayerDeviceDetailBean, Text> {
 
 	Map<String, String> map = new HashMap<>();

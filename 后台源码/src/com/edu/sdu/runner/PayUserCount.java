@@ -14,14 +14,19 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import com.edu.sdu.bean.Sysmbol;
+import com.edu.sdu.bean.TimeValueBean;
 import com.edu.sdu.mapper.DailyNewUserMapper;
 import com.edu.sdu.mapper.PayUserMapper;
 import com.edu.sdu.reducer.DailyNewUserReducer;
 import com.edu.sdu.reducer.PayUserCountReducer;
 import com.edu.sdu.util.Database;
-import com.sdu.edu.bean.Sysmbol;
-import com.sdu.edu.bean.TimeValueBean;
 
+/**
+ * 支付人数统计
+ * @author 王宁
+ *
+ */
 public class PayUserCount {
 
 	public static void main(String[] args) {

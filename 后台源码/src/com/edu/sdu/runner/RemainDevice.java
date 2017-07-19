@@ -12,15 +12,16 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+import com.edu.sdu.bean.RemainOprBean;
+import com.edu.sdu.bean.Sysmbol;
 import com.edu.sdu.mapper.RemainDeviceMapper;
 import com.edu.sdu.reducer.RemainDeviceReducer;
 import com.edu.sdu.util.Database;
 import com.edu.sdu.util.Tool;
-import com.sdu.edu.bean.RemainOprBean;
-import com.sdu.edu.bean.Sysmbol;
 
 /**
- * 留存设备计算
+ * 留存设备统计
  * @author 王宁
  *
  */
@@ -72,7 +73,8 @@ public class RemainDevice {
 				String count = val[1];
 				
 				String oneday = "", twoday = "", threeday = "", fourday = "",
-						fiveday = "", sixday = "", sevenday = "";
+						fiveday = "", sixday = "", sevenday = "", fourteenday = "",
+						thirtyday = "";
 				
 				if(space == 1)
 					oneday = count;
@@ -88,8 +90,14 @@ public class RemainDevice {
 					sixday = count;
 				else if (space == 7)
 					sevenday = count;
+				else if (space == 14) {
+					fourteenday = count;
+				}
+				else if (space == 30) {
+					thirtyday = count;
+				}
 				flag = database.updateRemainDevice(app_key, date, "", oneday, twoday, 
-						threeday, fourday, fiveday, sixday, sevenday);
+						threeday, fourday, fiveday, sixday, sevenday, fourteenday, thirtyday);
 			}
 			System.out.println(flag);
 		} catch (Exception e) {

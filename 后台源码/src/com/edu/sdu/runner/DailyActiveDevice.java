@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Date;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
@@ -20,12 +21,15 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.jobcontrol.ControlledJob;
 import org.apache.hadoop.mapreduce.lib.jobcontrol.JobControl;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.htrace.fasterxml.jackson.databind.ser.std.DateTimeSerializerBase;
 
+import com.edu.sdu.bean.Sysmbol;
 import com.edu.sdu.util.Database;
-import com.sdu.edu.bean.Sysmbol;
+import com.edu.sdu.util.Net;
+import com.edu.sdu.util.Tool;
 
 /**
- * function 日活跃设备
+ * 日活跃设备
  * 
  * @author 谢世杰
  */
@@ -34,12 +38,10 @@ public class DailyActiveDevice {
 	/**
 	 * 去重操作，把一天之内多次登录同一个APP的用户去掉
 	 */
-	public static class map_keeyOnly
-			extends Mapper<LongWritable, Text, Text, Text> {
+	public static class map_keeyOnly extends Mapper<LongWritable, Text, Text, Text> {
 
 		@Override
-		protected void map(LongWritable key, Text value,
-				Mapper<LongWritable, Text, Text, Text>.Context context)
+		protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, Text>.Context context)
 				throws IOException, InterruptedException {
 			String line = value.toString();
 			String[] files = line.split("\t");
@@ -49,15 +51,13 @@ public class DailyActiveDevice {
 		}
 	}
 
-	public static class reduce_keeyOnly
-			extends Reducer<Text, Text, Text, Text> {
+	public static class reduce_keeyOnly extends Reducer<Text, Text, Text, Text> {
 
 		@Override
-		protected void reduce(Text key, Iterable<Text> value,
-				Reducer<Text, Text, Text, Text>.Context context)
+		protected void reduce(Text key, Iterable<Text> value, Reducer<Text, Text, Text, Text>.Context context)
 				throws IOException, InterruptedException {
 			String time = null;
-			for(Text val : value){
+			for (Text val : value) {
 				time = val.toString();
 				break;
 			}
@@ -69,12 +69,10 @@ public class DailyActiveDevice {
 	/**
 	 * 获取某APP下活跃用户数量
 	 */
-	public static class map_appUser
-			extends Mapper<LongWritable, Text, Text, Text> {
+	public static class map_appUser extends Mapper<LongWritable, Text, Text, Text> {
 
 		@Override
-		protected void map(LongWritable key, Text value,
-				Mapper<LongWritable, Text, Text, Text>.Context context)
+		protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, Text>.Context context)
 				throws IOException, InterruptedException {
 			String line = value.toString();
 			String[] files = line.split("\\s+");
@@ -85,8 +83,7 @@ public class DailyActiveDevice {
 	public static class reduce_appUser extends Reducer<Text, Text, Text, Text> {
 
 		@Override
-		protected void reduce(Text key, Iterable<Text> value,
-				Reducer<Text, Text, Text, Text>.Context context)
+		protected void reduce(Text key, Iterable<Text> value, Reducer<Text, Text, Text, Text>.Context context)
 				throws IOException, InterruptedException {
 			int count = 0;
 			for (Text test : value) {
@@ -121,8 +118,10 @@ public class DailyActiveDevice {
 		ControlledJob ctrljob1 = new ControlledJob(conf);
 		ctrljob1.setJob(job1);
 		// job1的输入输出文件路径
-		/*FileInputFormat.addInputPath(job1, new Path(args[0]));
-		FileOutputFormat.setOutputPath(job1, new Path(args[1]));*/
+		/*
+		 * FileInputFormat.addInputPath(job1, new Path(args[0]));
+		 * FileOutputFormat.setOutputPath(job1, new Path(args[1]));
+		 */
 		FileInputFormat.addInputPath(job1, new Path(args[2]));
 		FileSystem fs2 = FileSystem.get(conf);
 		Path op2 = new Path(args[3]);
@@ -157,7 +156,7 @@ public class DailyActiveDevice {
 
 		// 输入路径是上一个作业的输出路径，因此这里填args[1],要和上面对应好
 		FileInputFormat.addInputPath(job2, new Path(args[3] + "/part-r-00000"));
-		//FileInputFormat.addInputPath(job2, new Path(args[1]));
+		// FileInputFormat.addInputPath(job2, new Path(args[1]));
 
 		// 输出路径从新传入一个参数，这里需要注意，因为我们最后的输出文件一定要是没有出现过得
 		// 因此我们在这里new Path(args[2])因为args[2]在上面没有用过，只要和上面不同就可以了
@@ -168,7 +167,7 @@ public class DailyActiveDevice {
 			System.out.println("存在此输出路径，已删除！！！");
 		}
 		FileOutputFormat.setOutputPath(job2, op3);
-		//FileOutputFormat.setOutputPath(job2, new Path(args[2]));
+		// FileOutputFormat.setOutputPath(job2, new Path(args[2]));
 
 		// 主的控制容器，控制上面的总的两个子作业
 		JobControl jobCtrl = new JobControl("myctrl");
@@ -189,21 +188,59 @@ public class DailyActiveDevice {
 				break;
 			}
 		}
-		
-		/*向数据库写数据操作*/
+
+		/* 向数据库写数据操作 */
 		Database database = Database.getInstance();
 		FileSystem fs0 = FileSystem.get(conf);
 		FSDataInputStream fdis = fs0.open(new Path(args[4] + "/part-r-00000"));
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fdis));
-		
+
 		String str = null;
 		boolean flag = false;
+		String postStr = "";
 		while ((str = bufferedReader.readLine()) != null) {
 			String[] val = str.split("\\s+");
-			flag = database.updateAppCriticalData(val[0],
-					"", "", "", val[2], "", "", val[1]);
+			String app_key = val[0];
+			String activeDevice = val[2];
+			String date = val[1];
+
+			String limitData[] = database.getAlertData(app_key, "1");
+			if (limitData[0] != null) {
+				String id = limitData[0];
+				int days = Integer.parseInt(limitData[1]);
+				String limit = limitData[2];
+				int trigger = Integer.parseInt(limitData[3]);
+				
+				int total = 0;
+				int computeDays = 0;
+				for (int i = 1; i <= days; i++) {
+					String predate = Tool.getPreNdayDate(date, i);
+					String criticalData[] = database.getAppCriticalData(app_key, predate);
+					if(criticalData[0] != null){
+						total += Integer.parseInt(criticalData[3]);
+						computeDays++;
+					}
+				}
+				if(computeDays > 0){
+					int preAverageData = total / computeDays;	// 之前的数据平均
+					if(Tool.getIsAlertOrNot(preAverageData, Integer.parseInt(activeDevice), Integer.parseInt(limit), trigger)){
+						flag = true;
+						System.out.println(preAverageData);
+						System.out.println(activeDevice);
+						if(!postStr.equals(""))
+							postStr += ",";
+						postStr += id;
+					}
+				}
+			}
+			
+			database.updateAppCriticalData(app_key, "", "", "", activeDevice, "", "", date);
 		}
 		System.out.println(flag);
+		if(flag){
+			if(!postStr.equals(""))
+				System.out.println(postStr);
+				Net.sendMail(postStr);
+		}
 	}
 }
-

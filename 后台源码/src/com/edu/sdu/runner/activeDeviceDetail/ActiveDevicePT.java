@@ -8,13 +8,18 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import com.edu.sdu.bean.PlayerDeviceDetailBean;
+import com.edu.sdu.bean.Sysmbol;
 import com.edu.sdu.mapper.activeDeviceDetail.ActiveDevicePTMapper;
 import com.edu.sdu.reducer.DetailReducer;
 import com.edu.sdu.util.Net;
 import com.edu.sdu.util.WriteJson;
-import com.sdu.edu.bean.PlayerDeviceDetailBean;
-import com.sdu.edu.bean.Sysmbol;
 
+/**
+ * 活跃设备 设备型号统计
+ * @author 王宁
+ *
+ */
 public class ActiveDevicePT {
 
 	public static void main(String[] args) {
